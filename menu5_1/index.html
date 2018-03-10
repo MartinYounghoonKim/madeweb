@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link href="../../css/common.css" type="text/css" rel="stylesheet">
+	<style>
+		html, body	{background:#fff;}
+		.header	{background:#ffe8ff; height:300px;}
+		.body	{position:relative; width:800px; height:2000px; margin:0 auto; background:#e8f6ff;}
+
+		.floating1	{position:absolute; top:0; left:50%; margin-left:-130px;}
+		.floating2	{position:absolute; top:0; left:50%; margin:-200px 0 0 820px;}
+		.floating3	{position:absolute; top:0; left:50%; margin:100px 0 0 410px; background:#ffcf7b; width:50px; height:500px; border-top:4px solid #06d; border-bottom:4px solid #06d;}
+
+		.footer	{background:#e8fff9; height:500px;}
+
+	</style>
+</head>
+
+<body>
+		<div class="header"></div>
+		<div class="body">
+			<!-- 
+				data-ui-name="floatingBar" = 플로팅바 기능을 사용하겠다~ 선언
+				data-floating-base=".body" = $(".body") 를 기준 래퍼로 설정하겠다.
+				data-floating-limit="500" = 스크롤시 화면 최하단으로부터 500픽셀 되는 지점에 플로팅바가 도착하면, 더이상 내려오지 못하게 하겠다.
+			-->
+			<div class="floating1" data-ui-name="floatingBar" data-floating-base=".body" data-floating-limit="500"><img src="banner1.png" alt=""></div>
+			<div class="floating2" data-ui-name="floatingBar" data-floating-base=".body" data-floating-limit="500"><img src="banner2.png" alt=""></div>
+			<div class="floating3" data-ui-name="floatingBar" data-floating-base=".body" data-floating-limit="500">플로팅바</div>
+		</div>
+		<div class="footer"></div>
+
+
+	<script type="text/javascript" src="jquery-1.9.1.min.js"></script>
+	<script type="text/javascript">
+		;(function(){
+			var floatingBar = {
+				init : function(obj){
+					var i = 0;
+					function Floating(my){
+						this.element = my;
+					}
+					Floating.prototype.init = function(){
+						this.obj = $(this.element.attr("data-floating-base"));
+						this.limit = this.element.attr("data-floating-limit") || 0;
+						this.originalPosition = {
+							x : this.obj.offset().left, y : this.obj.offset().top
+						};
+						this.element.css({
+							"position" : "fixed",
+							"top" : this.originalPosition.y,
+							"left" : this.originalPosition.x
+						});
+						this.space = parseInt(this.element.css("margin-top"));
+						this.border = parseInt(this.element.css("border-top-width")) + parseInt(this.element.css("border-bottom-width"));
+						this.move();
+					}
+					Floating.prototype.move = function(){
+						var	that = this,
+							x = 0,
+							y = 0;
+						$(window).resize(function(){
+							positionFix();
+						});
+						$(window).scroll(function(){
+							x = Math.max(document.body.scrollLeft, document.documentElement.scrollLeft);
+							y = Math.max(document.body.scrollTop, document.documentElement.scrollTop);
+							positionFix();
+						});
+						function positionFix(){
+							that.element.css({
+								"top" : y >= that.obj.offset().top + that.space
+									? that.element.innerHeight() + y > document.body.scrollHeight - that.limit
+										? document.body.scrollHeight - that.limit - (that.element.innerHeight() + that.space + y) - that.border
+										: 0 - that.space
+									: that.obj.offset().top - y,
+								"left" : that.obj.offset().left - x
+							});
+						}
+					}
+
+					for(; i < obj.size(); i++){
+						new Floating(obj.eq(i)).init();
+					}
+				}
+			};
+
+			floatingBar.init($("[data-ui-name='floatingBar']"));
+		}());
+	</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link href="../../css/common.css" type="text/css" rel="stylesheet">
+	<style>
+		html, body	{background:#fff;}
+
+		section	{height:300px;}
+
+	</style>
+</head>
+
+
+<body>
+
+	<section style="background:#ffd1d2;">1</section>
+	<section style="background:#e0ffd1;">2</section>
+	<section style="background:#d1f3ff;">3</section>
+	<section style="background:#e8d1ff;">4</section>
+	<section style="background:#fbffd1;">5</section>
+	<section style="background:#d1ffe9;">6</section>
+	<section style="background:#ffeed1;">7</section>
+
+	<script type="text/javascript" src="jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="wheel.js"></script>
+	<script type="text/javascript">
+		;(function(){
+			var wheelWindow = {
+				state : true,
+				cnt : 0,
+				range : 200,//한번 스크롤할때 몇 픽셀씩 움직일거냐?
+				init : function(){
+					var	that = this,
+						delay;
+					if(that.scrollStart === undefined){
+						delay = setTimeout(function(){
+							that.init();
+							return false;
+						}, 1000);
+					}else{
+						clearTimeout(delay);
+					}
+					if(that.scrollStart === 0 || that.scrollStart === undefined){
+						that.scrollStart = Math.max(document.body.scrollTop, document.documentElement.scrollTop);
+					}
+					that.cnt = Math.ceil(that.scrollStart / that.range);
+					that.max = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) / that.range;
+					$(window).on('mousewheel', function(event, delta){
+						if(that.state == false) return false;
+						that.state = false;
+						if(delta == -1){//휠 아래로
+							if(that.cnt < that.max){
+								that.cnt++;
+							}else{
+								that.cnt = that.max;
+							}
+						}else{//휠 위로
+							if(that.cnt > 0){
+								that.cnt--;
+							}else{
+								that.cnt = 0;
+							}
+						}
+						move();
+					});
+					function move(){
+						$("html, body").animate({
+							"scrollTop" : that.cnt * that.range
+						}, {
+							duration : 700,
+							complete : function(){
+								that.state = true;
+							}
+						});
+					}
+				}
+			};
+			wheelWindow.init();
+			$(window).scroll(function(){
+				wheelWindow.scrollStart = Math.max(document.body.scrollTop, document.documentElement.scrollTop);
+			});
+			$(window).on("mousewheel.disableScroll DOMMouseScroll.disableScroll touchmove.disableScroll", function(e) {
+				e.preventDefault();
+			});
+			//$(window).off(".disableScroll");
+		}());
+	</script>
+</body>
+</html>

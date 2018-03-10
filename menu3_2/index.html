@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link href="../../css/common.css" type="text/css" rel="stylesheet">
+	<style>
+		html, body	{background:#fff;}
+
+		.r1	{width:100%; overflow:hidden; margin-bottom:20px;}
+		.r1 li	{float:left; width:135px;}
+		.r1 li label	{position:relative; display:block; background:url("radio_style1.png") no-repeat 0 0; background-size:28px; padding:0 0 5px 35px; font-size:20px; color:#333;}
+		.r1 li label.on	{background:url("radio_style1_on.png") no-repeat 0 0; background-size:28px;}
+		.r1 li label input	{position:absolute; top:-100px;}
+
+		.r2	{width:100%; overflow:hidden; margin-bottom:20px;}
+		.r2 label	{width:100px; float:left; position:relative; display:block; background:url("radio_style1.png") no-repeat 0 0; background-size:28px; padding:0 0 5px 35px; font-size:20px; color:#333;}
+		.r2 label.on	{background:url("radio_style1_on.png") no-repeat 0 0; background-size:28px;}
+
+		.r3	{width:100%; overflow:hidden; margin-bottom:20px;}
+		.r3 label	{width:100px; float:left; position:relative; display:block; background:url("radio_style2.png") no-repeat 0 7px; padding:0 0 5px 20px; font-size:20px; color:#333;}
+		.r3 label.on	{background:url("radio_style2_on.png") no-repeat 0 7px;}
+		.r3 label input	{position:absolute; top:-100px;}
+
+		.design_radio	{width:100%; overflow:hidden;}
+		.design_radio label	{position:relative; display:block; padding:20px 0 20px 100px; overflow:hidden; float:left;}
+		.design_radio label > input[type="radio"]	{position:absolute; top:0; left:-100px; width:15px; height:15px;}
+		.design_radio label > input[type="radio"] + span	{position:absolute; top:0; left:30px; width:56px; height:56px; background:url("radio_style1.png") no-repeat 0 0;}
+		.design_radio label > input[type="radio"]:checked + span	{background:url("radio_style1_on.png") no-repeat 0 0;}
+	</style>
+</head>
+
+<body>
+	<ul class="r1" data-ui-name="design_radio">
+		<li><label><input type="radio" name="r1" checked="checked">예</label></li><!-- 선택된 상태로 로딩될때는 label에 on클래스 필요, 인풋에 checked 필요합니다. -->
+		<li><label><input type="radio" name="r1">아니오</label></li>
+	</ul>
+	<div class="r2" data-ui-name="design_radio">
+		<label><input type="radio" name="r2" checked="checked">예</label>
+		<label><input type="radio" name="r2">아니오</label>
+	</div>
+	<div class="r2" data-ui-name="design_radio">
+		<label><input type="radio" name="r3">예</label>
+		<label><input type="radio" name="r3" checked="checked">아니오</label>
+	</div>
+	<div class="r3" data-ui-name="design_radio">
+		<label><input type="radio" name="r4">좋음</label>
+		<label><input type="radio" name="r4">보통</label>
+		<label><input type="radio" name="r4">나쁨</label>
+		<label><input type="radio" name="r4">매우나쁨</label>
+	</div>
+
+	아래꺼는 css로 만든 디자인 라디오버튼(ie9이상만 가능, ie8이하는 :checked 슈도클래스가 지원안되서 작동불가)<br><br>
+	<div class="design_radio">
+		<label><input type="radio" name="r1" checked="checked"><span></span>가</label>
+		<label><input type="radio" name="r1"><span></span>나</label>
+		<label><input type="radio" name="r1"><span></span>다</label>
+		<label><input type="radio" name="r1"><span></span>라</label>
+	</div>
+
+	<div class="design_radio">
+		<label><input type="radio" name="r2" checked="checked"><span></span>가</label>
+		<label><input type="radio" name="r2"><span></span>나</label>
+		<label><input type="radio" name="r2"><span></span>다</label>
+		<label><input type="radio" name="r2"><span></span>라</label>
+	</div>
+
+	<script type="text/javascript" src="jquery-1.9.1.min.js"></script><!-- 제이쿼리 -->
+	<script>
+		function inputRadio(obj){
+			function OptionCheck(str){
+				this.element = str;
+			}
+			OptionCheck.prototype.init = function(){
+				var that = this;
+				this.option = $("label input", this.element);
+				this.beforeSelect;
+				this.option.each(function(){
+					if(this.checked == true){
+						that.beforeSelect = $(this).parents("label");
+						that.beforeSelect.addClass("on");
+					}
+				});
+				if($("label.on", this.element).size() > 0){
+					this.beforeSelect = $("label.on", this.element);
+				}
+				this.option.change(function(){
+					that.onSelect(that, this);
+				});
+			}
+			OptionCheck.prototype.onSelect = function(_this, element){
+				var me = element;
+				$(me).parents("label").addClass("on");
+
+				if(_this.beforeSelect !== undefined && _this.beforeSelect[0] !== $(me).parents("label")[0]){
+					_this.beforeSelect.removeClass("on");
+					_this.beforeSelect.find("input")[0].checked = false;
+				}
+				_this.beforeSelect = $(me).parents("label");
+				_this.beforeSelect.addClass("on");
+			}
+
+			for(var i = 0; i < obj.size(); i++){
+				new OptionCheck(obj.eq(i)).init();
+			}
+		}
+
+		inputRadio($("[data-ui-name='design_radio']"));
+	</script>
+
+</body>
+</html>

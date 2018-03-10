@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link href="../../css/common.css" type="text/css" rel="stylesheet">
+	<style>
+		html, body	{background:#fff;}
+
+		@font-face {
+			font-family:'Nanum Gothic';
+			font-style: normal;
+			font-weight: 400;
+			src: url("font/NanumGothic-Regular.eot");
+			src: local('※'), url("font/NanumGothic-Regular.eot?#iefix") format('embedded-opentype'),
+			url("font/NanumGothic-Regular.woff") format('woff'),
+			url("font/NanumGothic-Regular.ttf") format('truetype');
+		}
+		@font-face {
+			font-family:'Nanum Gothic';
+			font-style: normal;
+			font-weight: 700;
+			src: url("font/NanumGothic-Bold.eot");
+			src: local('※'), url("font/NanumGothic-Bold.eot?#iefix") format('embedded-opentype'),
+			url("font/NanumGothic-Bold.woff") format('woff'),
+			url("font/NanumGothic-Bold.ttf") format('truetype');
+		}
+		@font-face {
+			font-family:'Nanum Gothic';
+			font-style: normal;
+			font-weight: 800;
+			src: url("font/NanumGothic-ExtraBold.eot");
+			src: local('※'), url("font/NanumGothic-ExtraBold.eot?#iefix") format('embedded-opentype'),
+			url("font/NanumGothic-ExtraBold.woff") format('woff'),
+			url("font/NanumGothic-ExtraBold.ttf") format('truetype');
+		}
+		@font-face {
+			font-family: 'Nanum Barun Gothic';
+			font-style: normal;
+			font-weight: 200;
+			src: local('Nanum Barun Gothic UltraLight'), local('Nanum Barun Gothic-UltraLight'), local('NanumBarunGothic UltraLight');
+			src: url("font/NanumBarunGothicUltraLight.eot");
+			src: local('※'), url("font/NanumBarunGothicUltraLight.eot?#iefix") format('embedded-opentype'),
+			url("font/NanumBarunGothicUltraLight.woff2") format('woff2'),
+			url("font/NanumBarunGothicUltraLight.woff") format('woff'),
+			url("font/NanumBarunGothicUltraLight.ttf") format('truetype');
+		}
+		@font-face {
+			font-family: 'Nanum Barun Gothic';
+			font-style: normal;
+			font-weight: 300;
+			src: local('Nanum Barun Gothic Light'), local('Nanum Barun Gothic-Light'), local('NanumBarunGothic Light');
+			src: url("font/NanumBarunGothicLight.eot");
+			src: local('※'), url("font/NanumBarunGothicLight.eot?#iefix") format('embedded-opentype'),
+			url("font/NanumBarunGothicLight.woff2") format('woff2'),
+			url("font/NanumBarunGothicLight.woff") format('woff'),
+			url("font/NanumBarunGothicLight.ttf") format('truetype');
+		}
+		@font-face {
+			font-family: 'Nanum Barun Gothic';
+			font-style: normal;
+			font-weight: 400;
+			src: local('Nanum Barun Gothic Regular'), local('Nanum Barun Gothic-Regular'), local('NanumBarunGothic Regular');
+			src: url("font/NanumBarunGothic.eot");
+			src: local('※'), url("font/NanumBarunGothic.eot?#iefix") format('embedded-opentype'),
+			url("font/NanumBarunGothic.woff2") format('woff2'),
+			url("font/NanumBarunGothic.woff") format('woff'),
+			url("font/NanumBarunGothic.ttf") format('truetype');
+		}
+		@font-face {
+			font-family: 'Nanum Barun Gothic';
+			font-style: normal;
+			font-weight: 700;
+			src: local('Nanum Barun Gothic Bold'), local('Nanum Barun Gothic-Bold'), local('NanumBarunGothic Bold');
+			src: url("font/NanumBarunGothicBold.eot");
+			src: local('※'), url("font/NanumBarunGothicBold.eot?#iefix") format('embedded-opentype'),
+			url("font/NanumBarunGothicBold.woff2") format('woff2'),
+			url("font/NanumBarunGothicBold.woff") format('woff'),
+			url("font/NanumBarunGothicBold.ttf") format('truetype');
+		}
+		@font-face {
+			font-family: 'Nanum Myeongjo';
+			font-style: normal;
+			font-weight: 400;
+			src: url("font/NanumMyeongjo-Regular.eot");
+			src: local('※'), url("font/NanumMyeongjo-Regular.eot?#iefix") format('embedded-opentype'),
+			url("font/NanumMyeongjo-Regular.woff2") format('woff2'),
+			url("font/NanumMyeongjo-Regular.woff") format('woff'),
+			url("font/NanumMyeongjo-Regular.ttf") format('truetype');
+		}
+		@font-face {
+			font-family: 'Nanum Myeongjo';
+			font-style: normal;
+			font-weight: 600;
+			src: url("font/NanumMyeongjo-Bold.eot");
+			src: local('※'), url("font/NanumMyeongjo-Bold.eot?#iefix") format('embedded-opentype'),
+			url("font/NanumMyeongjo-Bold.woff2") format('woff2'),
+			url("font/NanumMyeongjo-Bold.woff") format('woff'),
+			url("font/NanumMyeongjo-Bold.ttf") format('truetype');
+		}
+		@font-face {
+			font-family: 'Nanum Myeongjo';
+			font-style: normal;
+			font-weight: 700;
+			src: url("font/NanumMyeongjo-ExtraBold.eot");
+			src: local('※'), url("font/NanumMyeongjo-ExtraBold.eot?#iefix") format('embedded-opentype'),
+			url("font/NanumMyeongjo-ExtraBold.woff2") format('woff2'),
+			url("font/NanumMyeongjo-ExtraBold.woff") format('woff'),
+			url("font/NanumMyeongjo-ExtraBold.ttf") format('truetype');
+		}
+
+	</style>
+</head>
+
+<body>
+	<p style="font-family:Nanum Gothic; font-size:20px; font-weight:400;">나눔고딕 굵기 400</p>
+	<p style="font-family:Nanum Gothic; font-size:20px; font-weight:600;">나눔고딕 굵기 600</p>
+	<p style="font-family:Nanum Gothic; font-size:20px; font-weight:900;">나눔고딕 굵기 900</p>
+	<p style="font-family:Nanum Barun Gothic; font-size:20px; font-weight:200;">나눔바른고딕 굵기 200</p>
+	<p style="font-family:Nanum Barun Gothic; font-size:20px; font-weight:300;">나눔바른고딕 굵기 300</p>
+	<p style="font-family:Nanum Barun Gothic; font-size:20px; font-weight:400;">나눔바른고딕 굵기 400</p>
+	<p style="font-family:Nanum Barun Gothic; font-size:20px; font-weight:700;">나눔바른고딕 굵기 700</p>
+	<p style="font-family:Nanum Myeongjo; font-size:20px; font-weight:400;">나눔명조 굵기 400</p>
+	<p style="font-family:Nanum Myeongjo; font-size:20px; font-weight:600;">나눔명조 굵기 600</p>
+	<p style="font-family:Nanum Myeongjo; font-size:20px; font-weight:700;">나눔명조 굵기 700</p>
+</body>
+</html>

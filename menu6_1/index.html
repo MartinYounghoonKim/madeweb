@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link href="../../css/common.css" type="text/css" rel="stylesheet">
+	<style>
+		html, body	{background:#fff;}
+		h1	{margin:0; padding:0;}
+
+		.layerpopup	 {position:absolute; top:100px; left:50%; width:400px; height:400px; border:1px solid #000; background:#fff; display:none;}
+		.layerpopup .layer_box	{position:relative;}
+		.layerpopup h1	{font-size:20px; border-bottom:1px solid #000; font-weight:normal; padding:10px 15px 13px; background:#0080d5; color:#fff;}
+		.layerpopup .close	 {position:absolute; top:12px; right:15px; width:18px; height:18px; overflow:hidden; background:url("close.gif") no-repeat 0 0;}
+		.layerpopup .close span	{display:block; width:0; height:0; overflow:hidden;}
+
+	</style>
+</head>
+
+	<a href="#" data-popup="layerpopup" data-popup-target=".layerpopup1">팝업1</a><!-- data-popup="layerpopup" 레이어 팝업 기능을 사용하겠다. data-popup-target=".layerpopup1" 클릭시 어떤 레이어를 보여주겠다. -->
+	<a href="#" data-popup="layerpopup" data-popup-target=".layerpopup2">팝업2</a>
+	<a href="#" data-popup="layerpopup" data-popup-target=".layerpopup3">팝업3</a>
+	<a href="#" data-popup="layerpopup" data-popup-target=".layerpopup4">팝업4</a>
+	<a href="#" data-popup="layerpopup" data-popup-target=".layerpopup5">팝업5</a>
+
+	<div class="layerpopup layerpopup1" data-popup-move><!-- data-popup-move 쿼리셀렉터가 붙으면 해당영역을 잡고 drag가 가능하다 -->
+		<div class="layer_box">
+			<h1>레이어1</h1>
+			<button type="button" class="close" data-popup-ctrl="closer"><span>닫기</span></button><!-- data-popup-ctrl="closer" 쿼리셀렉터가 붙으면 클릭시 레이어가 닫힌다 -->
+			<div class="layer_body">
+				레이어 전체가 무브영역
+			</div>
+		</div>
+	</div>
+
+	<div class="layerpopup layerpopup2">
+		<div class="layer_box">
+			<h1 data-popup-move>레이어2</h1>
+			<button type="button" class="close" data-popup-ctrl="closer"><span>닫기</span></button>
+			<div class="layer_body">
+				헤더만 무브영역
+			</div>
+		</div>
+	</div>
+
+	<div class="layerpopup layerpopup3">
+		<div class="layer_box">
+			<h1>레이어3</h1>
+			<button type="button" class="close" data-popup-ctrl="closer"><span>닫기</span></button>
+			<div class="layer_body">
+				무브안됨
+			</div>
+		</div>
+	</div>
+
+	<div class="layerpopup layerpopup4">
+		<div class="layer_box">
+			<h1>레이어4</h1>
+			<button type="button" class="close" data-popup-ctrl="closer"><span>닫기</span></button>
+			<div class="layer_body">
+				<div style="border:1px solid red; width:100px; height:100px;" data-popup-move>여기가 무브 영역</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="layerpopup layerpopup5" data-popup-move>
+		<div class="layer_box">
+			<h1>레이어5</h1>
+			<button type="button" class="close" data-popup-ctrl="closer"><span>닫기</span></button>
+			<div class="layer_body">
+				레이어 전체가 무브영역
+			</div>
+		</div>
+	</div>
+
+<body>
+
+
+	<script type="text/javascript" src="jquery-1.9.1.min.js"></script>
+	<script type="text/javascript">
+		;(function(){
+			var layerpopup = {
+				init : function(obj){
+					var	_super_ = this,
+						i = 0,
+						maxindex;
+
+						obj.each(function(i){
+							if(this.style.zIndex === ""){
+								maxindex = 0;
+							}
+						});
+					function Layer(my){
+						this.element = my;
+						this.target = $(this.element.attr("data-popup-target"));
+						this.closer = $(this.target.find("[data-popup-ctrl='closer']"));
+						this.move = $(this.element.attr("data-popup-move"));
+					}
+					Layer.prototype = {
+						init : function(){
+							var that = this;
+							this.element.click(showLayer);
+							this.closer.click(hideLayer);
+
+							function showLayer(){
+								that.target.show();
+								zIndexUp(that.target[0]);
+							}
+							function hideLayer(){
+								that.target.hide();
+							}
+							function zIndexUp(me){
+								me.style.zIndex = ++maxindex;
+							}
+							this.target.mousedown(function(){
+								zIndexUp(this);
+							});
+							if(this.move){
+								this.moveCtrl();
+							}
+						},
+						moveCtrl : function(){
+							var	element = this.target,
+								handler = this.target.attr("data-popup-move") !== undefined ? this.target : this.target.find($("[data-popup-move]")),
+								state = false,
+								startX, startY, pointX, pointY;
+
+							handler.mousedown(function(e){
+								state = true;
+								pointX = e.pageX - element.offset().left;
+								pointY = e.pageY - element.offset().top;
+								document.body.onselectstart = function(){
+									return false;
+								}
+							});
+							handler.mouseenter(function(){
+								this.style.cursor = "move";
+							});
+							handler.mouseleave(function(){
+								this.style.cursor = "default";
+							});
+							$(window).mousemove(function(e){
+								if(state !== true) return false;
+								startX = e.pageX - pointX,
+								startY = e.pageY - pointY;
+								finishMove();
+								e.stopPropagation();
+							});
+							$(window).mouseup(function(e){
+								state = false;
+								finalX = e.pageX - pointX;
+								finalY = e.pageY - pointY;
+								e.stopPropagation();
+								document.body.onselectstart = null;
+							});
+							function finishMove(){
+								element.css({
+									"top" : state
+										? Math.min(Math.max(0, startY), $(window).height() - element.innerHeight())
+										: Math.max(0, finalY),
+									"left" : state
+										? Math.min(Math.max(0, startX), $(window).width() - element.innerWidth())
+										: Math.max(0, finalX)
+								});
+							}
+						}
+					};
+					for(; i < obj.size(); i++){
+						new Layer(obj.eq(i)).init();
+					}
+				}
+			};
+			layerpopup.init($("[data-popup='layerpopup']"));
+		}());
+	</script>
+</body>
+</html>

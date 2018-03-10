@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link href="../../css/common.css" type="text/css" rel="stylesheet">
+	<style>
+		html, body	{background:#fff;}
+
+		.c1	{width:100%; overflow:hidden; margin-bottom:20px;}
+		.c1 li	{float:left; width:135px;}
+		.c1 label	{position:relative; display:block; background:url("check_style1.gif") no-repeat 0 7px; padding:0 0 5px 20px; font-size:20px; color:#333;}
+		.c1 > label	{float:left; padding:0 20px 5px;}
+		.c1 label.on	{background:url("check_style1_on.gif") no-repeat 0 7px;}
+		.c1 label input	{position:absolute; top:-100px;}
+
+	</style>
+</head>
+
+<body>
+	<ul class="c1" data-ui-name="design_check">
+		<li><label><input type="checkbox" checked="checked">예</label></li><!-- 선택된 상태로 로딩될때는 label에 on클래스 필요, 인풋에 checked 필요합니다. -->
+		<li><label><input type="checkbox">아니오</label></li>
+	</ul>
+	<div class="c1" data-ui-name="design_check">
+		<label><input type="checkbox" checked="checked">예</label>
+		<label><input type="checkbox">아니오</label>
+	</div>
+	<div class="c1" data-ui-name="design_check">
+		<label><input type="checkbox">월</label>
+		<label><input type="checkbox">화</label>
+		<label><input type="checkbox">수</label>
+		<label><input type="checkbox">목</label>
+		<label><input type="checkbox">금</label>
+		<label><input type="checkbox">토</label>
+		<label><input type="checkbox">일</label>
+	</div>
+	<div class="c1" data-ui-name="design_check">
+		<label><input type="checkbox" checked="checked">개</label>
+		<label><input type="checkbox" checked="checked">고양이</label>
+		<label><input type="checkbox">돼지</label>
+		<label><input type="checkbox">새</label>
+	</div>
+
+
+
+	<script type="text/javascript" src="jquery-1.9.1.min.js"></script><!-- 제이쿼리 -->
+	<script>
+		function inputCheck(obj){
+			function OptionCheck(str){
+				this.element = str;
+			}
+			OptionCheck.prototype.init = function(){
+				var that = this;
+				this.option = $("label input", this.element);
+				this.option.each(function(){
+					if(this.checked == true){
+						$(this).parents("label").addClass("on");
+					}
+				});
+				this.option.change(function(){
+					that.onSelect(that, this);
+				});
+			}
+			OptionCheck.prototype.onSelect = function(_this, element){
+				var me = element;
+				if(me.checked === true){
+					$(me).parents("label").addClass("on");
+				}else{
+					$(me).parents("label").removeClass("on");
+				}
+			}
+
+			for(var i = 0; i < obj.size(); i++){
+				new OptionCheck(obj.eq(i)).init();
+			}
+		}
+
+		inputCheck($("[data-ui-name='design_check']"));
+	</script>
+
+</body>
+</html>

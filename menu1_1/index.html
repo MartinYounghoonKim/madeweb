@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link href="../../css/common.css" type="text/css" rel="stylesheet">
+	<style>
+		.main_visual	{min-width:1004px; width:100%; height:500px; position:relative; overflow:hidden;}
+		.main_visual .show_img	 {position:relative; max-width:100%; margin:0 auto; z-index:1;}
+		.main_visual .show_img ul	{}
+		.main_visual .show_img ul li	{position:absolute; top:0; left:50%; margin-left:-960px;}
+		.main_visual .show_img ul li img	{height:500px;}
+		.main_visual .tabs	{position:absolute; bottom:31px; width:100%; z-index:2; text-align:center;}
+		.main_visual .tabs ul	{display:inline-block; vertical-align:middle;}
+		.main_visual .tabs ul li	{display:inline-block; margin:0 2px;}
+		.main_visual .tabs ul li button	{display:inline-block; background:url("visual_indicator.png") no-repeat -26px 0; width:16px; height:20px; vertical-align:middle;}
+		.main_visual .tabs ul li.on	{}
+		.main_visual .tabs ul li.on button	{background-position:-49px 0;}
+		.main_visual .tabs .stop	 {display:inline-block; background:url("visual_indicator.png") no-repeat -74px 0; width:21px; height:20px; vertical-align:middle;}
+		.main_visual .tabs .play	 {display:inline-block; background:url("visual_indicator.png") no-repeat -101px 0; width:21px; height:20px; vertical-align:middle;}
+		.main_visual .tabs .prev {display:inline-block; background:url("visual_indicator.png") no-repeat 0 0; width:12px; height:20px; vertical-align:middle; margin-right:17px;}
+		.main_visual .tabs .next {display:inline-block; background:url("visual_indicator.png") no-repeat -134px 0; width:12px; height:20px; vertical-align:middle; margin-left:17px;}
+		.main_visual .tabs button span	{display:block; width:0; height:0; overflow:hidden;}
+		.main_visual .summaries	{position:absolute; top:0; left:0; width:100%; z-index:3;}
+		.main_visual .summaries .ctrl	{position:relative; width:100%; height:0; margin:0 auto; z-index:1;}
+		.main_visual .summaries .ctrl .sale_state img	{width:50px;}
+		.main_visual .summaries .ctrl .prev	{position:absolute; top:225px; left:250px; display:inline-block; vertical-align:middle; background:url("prev.png") no-repeat 0 0; width:36px; height:55px;}
+		.main_visual .summaries .ctrl .prev span	 {display:block; overflow:hidden; width:0; text-indent:100%; font-size:0;}
+		.main_visual .summaries .ctrl .stop	{display:none; vertical-align:middle;}
+		.main_visual .summaries .ctrl .stop span	 {display:block; overflow:hidden; width:0; text-indent:100%; font-size:0;}
+		.main_visual .summaries .ctrl .next	{position:absolute; top:225px; right:250px; display:inline-block; vertical-align:middle; background:url("next.png") no-repeat 0 0; width:36px; height:55px;}
+		.main_visual .summaries .ctrl .next span	 {display:block; overflow:hidden; text-indent:100%; font-size:0;}
+	</style>
+</head>
+
+<body>
+	<div class="main_visual" data-ui-name="visual_rolling" data-ctrl="> .summaries, .tabs" data-list="> .show_img" data-delay="4000">
+		<div class="show_img">
+			<ul>
+				<li><a href="#"><img src="visual_image1.png" alt="홈플러스 문화센터 겨울학기 회원모집!"></a></li>
+				<li><a href="#"><img src="visual_image2.png" alt="많은 사람들이 기다리던 바로 그 소식! 2015.10.15 인천 송도점 오픈!"></a></li>
+				<li><a href="#"><img src="visual_image3.png" alt="많은 사람들이 기다리던 바로 그 소식! 2015.10.15 인천 송도점 오픈!"></a></li>
+			</ul>
+		</div>
+		<div class="summaries">
+			<p class="ctrl">
+				<button type="button" class="prev"><span>이전</span></button>
+				<button type="button" class="next"><span>다음</span></button>
+			</p>
+		</div>
+		<div class="tabs">
+			<button type="button" class="prev"><span>이전</span></button>
+			<ul>
+				<li class="on"><button type="button"><span>홈플러스 문화센터 겨울학기 회원모집!</span></button></li>
+				<li><button type="button"><span>많은 사람들이 기다리던 바로 그 소식! 2015.10.15 인천 송도점 오픈!</span></button></li>
+				<li><button type="button"><span>많은 사람들이 기다리던 바로 그 소식! 2015.10.15 인천 송도점 오픈!</span></button></li>
+			</ul>
+			<button type="button" class="stop"><span>정지/재생 토글버튼</span></button>
+			<button type="button" class="next"><span>다음</span></button>
+		</div>
+	</div>
+	<script type="text/javascript" src="jquery-1.9.1.min.js"></script><!-- 제이쿼리 -->
+	<script type="text/javascript">
+		function Rolling_transition(obj){
+			function TransitionVisual(obj){
+				this.element = $(obj);
+			}
+			TransitionVisual.prototype.init = function(){
+				this.ctrl = $(this.element.attr("data-ctrl"), this.element);
+				this.prev = $(".prev", this.ctrl);
+				this.stop = $(".stop", this.element);
+				this.next = $(".next", this.ctrl);
+				this.listwrap = $(this.element.attr("data-list"), this.element);
+				this.list = $("li", this.listwrap);
+				this.description = $("ul", this.ctrl.parents(".summaries"));
+				this.description_list = $("li", this.description);
+				this.cnt = 0;
+				this.lastCnt = 0;
+				this.state = true;
+				this.useThumbs = false;
+				this.thumbs = $(".tabs", this.element);
+				this.thumb = $("li", this.thumbs);
+				this.duration = 1000;
+				var that = this, auto, delay = this.element.attr("data-delay"), power = "on";
+				this.list.eq(0).addClass("on");
+
+				if(this.thumb.size() > 0){
+					this.useThumbs = true;
+					this.thumb.eq(0).addClass("on");
+				}
+				if(this.list.size() == 1){
+					this.ctrl.remove();
+					this.description.addClass("single");
+					return false;
+				}
+
+				this.list.eq(0).css("z-index", this.list.size() - 1);
+				this.description_list.each(function(i){
+					if(that.cnt != i){
+						$(this).css({"z-index" : that.description_list.size() - i - 1, "opacity" : 0});
+					}else{
+						$(this).css({"z-index" : that.description_list.size() - 1, "opacity" : 1});
+					}
+				});
+
+				auto = setInterval(function(){
+					if(power == "off") return false;
+					that.next.click();
+				}, delay);
+
+				this.prev.click(function(){
+					if(that.state == false) return false;
+					that.state = false;
+					if(that.cnt > 0){
+						that.cnt--;
+					}else{
+						that.cnt = that.list.size() - 1;
+					}
+					that.move();
+					return false;
+				});
+				this.next.click(function(){
+					if(that.state == false) return false;
+					that.state = false;
+					if(that.cnt < that.list.size() - 1){
+						that.cnt++;
+					}else{
+						that.cnt = 0;
+					}
+					that.move();
+					return false;
+				});
+				this.stop.click(function(){
+					if(power == "on"){
+						power = "off";
+						$(this).addClass("play");
+					}else{
+						power = "on";
+						$(this).removeClass("play");
+					}
+					return false;
+				});
+				this.thumb.click(function(){
+					if(that.cnt == $(this).index()){
+						that.state = true;
+						return false;
+					}
+					that.state = true;
+					that.cnt = $(this).index();
+					that.move();
+					return false;
+				});
+			}
+			TransitionVisual.prototype.move = function(){
+				this.useThumbnails();
+				var that = this;
+				this.list.each(function(i){
+					if(that.cnt != i){
+						$(this).css("z-index", $(this).css("z-index") - 1);
+						$(this).removeClass("on");
+					}else{
+						$(this).css("z-index", that.list.size() - 1);
+						$(this).addClass("on");
+					}
+				});
+				this.description_list.each(function(i){
+					if(that.cnt != i){
+						$(this).css("z-index", $(this).css("z-index") - 1);
+					}else{
+						$(this).css("z-index", that.description_list.size() - 1);
+					}
+				});
+
+				if(this.lastCnt != this.cnt){
+					this.description_list.eq(this.lastCnt).animate({
+						"opacity" : 0
+					},{
+						duration : that.duration / 2
+					});
+				}
+				this.description_list.eq(this.cnt).css({"opacity" : 0}).animate({
+					"opacity" : 1
+				},{
+					duration : that.duration / 2
+				});
+				this.list.eq(this.cnt).css({"opacity" : 0}).animate({
+					"opacity" : 1
+				},{
+					duration : that.duration,
+					complete : function(){
+						that.state = true;
+					}
+				});
+				this.lastCnt = this.cnt;
+			}
+			TransitionVisual.prototype.useThumbnails = function(){
+				this.thumb.removeClass("on").eq(this.cnt).addClass("on");
+			}
+
+			var i = 0, inst;
+			for(var i = 0; i < obj.length; i++){
+				var inst = new TransitionVisual(obj[i]);
+				inst.init();
+			}
+		}
+		Rolling_transition($("[data-ui-name='visual_rolling']"));
+	</script>
+</body>
+</html>

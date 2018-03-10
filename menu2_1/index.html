@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link href="../../css/common.css" type="text/css" rel="stylesheet">
+	<style>
+		html, body	{background:#fff;}
+
+		.tabmenu	{border-bottom:1px solid #000; margin:50px;}
+		.tabmenu ul	{width:100%; overflow:hidden;}
+		.tabmenu ul li	{float:left; margin-right:-1px;}
+		.tabmenu ul li a	{display:block; width:200px; text-align:center; padding:13px 0 15px; border:1px solid #ccc; border-bottom:0;}
+		.tabmenu ul li.on	{position:relative;}
+		.tabmenu ul li.on a	{border-color:#000;}
+
+		.ani_class	{display:none;}
+		#tab_content1	{display:block; background:#fcc;}
+		#tab_content2	{background:#cfc;}
+		#tab_content3	{background:#ccf;}
+
+		#tab_content4	{display:block; background:#fcc;}
+		#tab_content5	{background:#cfc;}
+		#tab_content6	{background:#ccf;}
+	</style>
+</head>
+
+<body>
+	<div class="tabmenu" data-ui-name="tabmenu">
+		<ul>
+			<li class="on"><a href="#tab_content1">탭1</a></li>
+			<li><a href="#tab_content2">탭2</a></li>
+			<li><a href="#tab_content3">탭3</a></li>
+		</ul>
+	</div>
+	<div class="ani_class" id="tab_content1">탭 컨텐츠 1</div>
+	<div class="ani_class" id="tab_content2">탭 컨텐츠 2</div>
+	<div class="ani_class" id="tab_content3">탭 컨텐츠 3</div>
+
+
+
+	<div class="tabmenu" data-ui-name="tabmenu">
+		<ul>
+			<li class="on"><a href="#tab_content4">탭1</a></li>
+			<li><a href="#tab_content5">탭2</a></li>
+			<li><a href="#tab_content6">탭3</a></li>
+		</ul>
+	</div>
+	<div class="ani_class" id="tab_content4">탭 컨텐츠 1</div>
+	<div class="ani_class" id="tab_content5">탭 컨텐츠 2</div>
+	<div class="ani_class" id="tab_content6">탭 컨텐츠 3</div>
+
+
+
+	<script type="text/javascript" src="jquery-1.9.1.min.js"></script><!-- 제이쿼리 -->
+	<script type="text/javascript">
+		function ui_tabmenu(obj, evt){
+			var element = obj, i = 0;
+			function Tab(){
+			}
+			Tab.prototype.init = function(obj){
+				this.wrap = $(obj);
+				this.ul = $("ul", this.wrap);
+				this.li = $("li", this.ul);
+				this.hash = $("li.on", this.ul).find("a").attr("href").split("#")[1];
+				this.on = $("#" + this.hash);
+
+				var that = this;
+
+				this.li[evt](function(){
+					that.hash = $(this).find("a").attr("href").split("#")[1];
+					that.li.removeClass("on");
+					$(this).addClass("on");
+					that.on.hide();
+					that.on = $("#" + that.hash);
+					that.on.show();
+					return false;
+				});
+			}
+			for(; i < element.size(); i++){
+				instance = new Tab();
+				instance.init(element[i]);
+			}
+		}
+		ui_tabmenu($("[data-ui-name='tabmenu']"), "click");
+	</script>
+</body>
+</html>

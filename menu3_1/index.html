@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link href="../../css/common.css" type="text/css" rel="stylesheet">
+	<style>
+		html, body	{background:#fff;}
+
+		/* 셀렉트박스 */
+		.select_style1	{border:1px solid #333; display:inline-block; vertical-align:middle; position:relative; margin:0 0 4px; text-align:left;}
+		.select_style1 .default	{overflow:hidden; background:url("select_style1.png") #585858 no-repeat 100% 11px; font-weight:normal;}
+		.select_style1 .default a	 {color:#bbb; font-size:12px; display:block; padding:8px 32px 7px 9px; line-height:1.1;}
+		.select_style1 ul	{position:absolute; top:28px; left:-1px; border:1px solid #333; background:#585858; border-top:0; width:100%; display:none;}
+		.select_style1.on	{z-index:1000;}
+		.select_style1.on .default	{background:url("select_style1_on.png") #585858 no-repeat 100% 11px;}
+		.select_style1.on ul	{display:block;}
+		.select_style1 ul li	{line-height:1.1;}
+		.select_style1 ul li a	{padding:5px 10px; display:block; font-size:11px; color:#bbb;}
+		.select_style1 ul li a:hover	{background:#3b3b3b;}
+
+		.select_style2	{border:1px solid #58595b; display:inline-block; vertical-align:middle; position:relative; background:#fff;}
+		.select_style2 .default	{background:url("select_style1.png") no-repeat 100% 13px; overflow:hidden;}
+		.select_style2 .default a	 {color:#373539; font-size:14px; display:block; padding:7px 30px 10px 9px; line-height:1.1;}
+		.select_style2.on .default	{background-image:url("select_style1_on.png");}
+		.select_style2 ul	{position:absolute; top:31px; left:-1px; border:1px solid #58595b; background:#fff; width:100%; max-height:200px; overflow:hidden; overflow-y:auto; display:none; padding:5px 0 8px;}
+		.select_style2.on	{z-index:1000;}
+		.select_style2.on ul	{display:block;}
+		.select_style2 ul li	{line-height:1.1;}
+		.select_style2 ul li a	{padding:3px 10px; display:block; font-size:13px; color:#373539;}
+	</style>
+</head>
+
+<body>
+	<div class="select_style1" data-ui-type="selectbox" style="width:100px;">
+		<p class="default"><a href="#" title="생년월일 연도 선택 열기/닫기">년</a></p>
+		<ul>
+			<li><a href="#">2000</a></li>
+			<li><a href="#">1999</a></li>
+		</ul>
+	</div>
+	<div class="select_style1" data-ui-type="selectbox" style="width:100px;">
+		<p class="default"><a href="#" title="생년월일 월 선택 열기/닫기">월</a></p>
+		<ul>
+			<li><a href="#">01</a></li>
+			<li><a href="#">02</a></li>
+			<li><a href="#">03</a></li>
+			<li><a href="#">04</a></li>
+		</ul>
+	</div>
+	<div class="select_style1" data-ui-type="selectbox" style="width:100px;">
+		<p class="default"><a href="#" title="생년월일 일 선택 열기/닫기">일</a></p>
+		<ul>
+			<li><a href="#">01</a></li>
+			<li><a href="#">02</a></li>
+			<li><a href="#">03</a></li>
+			<li><a href="#">04</a></li>
+			<li><a href="#">05</a></li>
+			<li><a href="#">06</a></li>
+		</ul>
+	</div>
+	<div class="select_style2" data-ui-type="selectbox" style="width:150px;">
+		<p class="default"><a href="#">셀렉트스타일2</a></p>
+		<ul>
+			<li><a href="#">옵션1</a></li>
+			<li><a href="#">옵션2</a></li>
+		</ul>
+	</div>
+
+
+	<script type="text/javascript" src="jquery-1.9.1.min.js"></script><!-- 제이쿼리 -->
+	<script type="text/javascript">
+		function selectbox(obj){
+			var element = obj, i = 0;
+			function Selectbox(){
+			}
+
+			Selectbox.prototype.init = function(me){
+				var that = me,
+					input = $("input[type='hidden']", me),
+					defaultText = $("p", me),
+					option = $("li", me),
+					mywrap = null,
+					before = null;
+
+				defaultText.unbind("click").click(function(e){
+					obj.not(me).removeClass("on");
+					reset();
+					mywrap = $(this).parents(obj);
+					mywrap.toggleClass("on");
+					return false;
+				});
+				option.unbind("click").click(function(e){
+					option.removeClass("on");
+					$(this).addClass("on");
+					defaultText.find("a").html($(this).text());
+					if(input.size() > 0){
+						input.val($(this).attr("data-code"));
+					}
+				});
+			}
+			function reset(){
+				$(document).unbind("click").bind("click",function(){
+					obj.removeClass("on");
+				});
+			}
+
+			for(; i < element.size(); i++){
+				instance = new Selectbox();
+				instance.init(element[i]);
+			}
+		}
+		selectbox($("[data-ui-type='selectbox']"));
+	</script>
+</body>
+</html>
